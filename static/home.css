@@ -1,0 +1,193 @@
+.title1 
+{
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-family: "DM Sans", sans-serif;
+    font-weight:800;
+    font-size:40px;
+    margin:0;
+}
+
+.title1 header,
+.title1 p {
+    margin: 12px; /* Remove margin for both header and p */
+}
+.title1 p {
+    font-size:20px;
+    font-weight:bold;
+    color:grey;
+}
+
+
+.main .img1{
+    height:550px;
+    width:100%;
+    object-fit:contain;
+    padding-bottom:100px;
+    
+
+}
+
+.aboutp {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    border: 1.5px solid #212121;
+    padding: 15px;
+    position: absolute;
+    justify-content: center;
+    text-align: left;
+    border-radius: 2px;
+    /* background-color:#2F3C7E;*/
+    background: linear-gradient(259.53deg, #6EACDA 42.82%, #03346E 98.02%);
+    padding: 25px 0;
+    top: 800px;
+    color: #FBEAEB;
+    height: 460px;
+    width: 100%;
+    padding-left: 100px;
+    transition: all .5s ease-in;
+  }
+  
+  .aboutp h1 {
+    font-size: 70px;
+    text-emphasis-color: pink;
+  }
+  
+  .aboutp img {
+    align-items:flex-start;
+    height:400px;
+  }
+
+  .branchhead {
+    font-size: 20px;
+    color: #212121;
+    position: absolute;
+    top: 1300px;
+    margin: 20px;
+    text-align: center;
+    justify-content: center;
+    font-family: "DM Sans", sans-serif;
+    width:100%;
+    height: 1400px;
+  }
+  
+  .branchhead h1 {
+    font-size: 60px;
+    color: #2F3C7E;
+  }
+
+  .branch {
+    display: flex;
+    flex-direction: row;
+    position: absolute;
+    top: 1500px;
+    left: 250px;
+    padding-right: 33px;
+    align-items: center;
+    justify-content: center;
+    display: grid;
+    grid-template-columns: auto auto auto ;
+  }
+  
+  .card {
+    position: relative;
+    left:150px;
+    width: 250px;
+    height: 550px;
+    background: linear-gradient(259.53deg, #0F67B1 4242.82%, #3FA2F6 9898.02%);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-size: 25px;
+    font-weight: bold;
+    border-radius: 15px;
+    cursor: pointer;
+    padding-right: 30px;
+    padding-left:30px;
+    margin: 23px;
+    color: #FBEAEB;
+    font-family: "DM Sans", sans-serif;
+    box-shadow: 0 0 0 5px #ffffff80;
+  }
+  
+  .card::before,
+  .card::after {
+    font-family: "DM Sans", sans-serif;
+    color: #FBEAEB;
+    position: absolute;
+    content: "";
+    width: 20%;
+    height: 20%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    font-family: "DM Sans",sans-serif;
+    background-color: #3FA2F6;
+    /*transition: all 0.2s;*/
+    transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    word-spacing: 0.1px;
+    text-wrap: wrap;
+    overflow: hidden;
+    perspective: 1000px;
+  
+  }
+  
+  .card::before {
+    top: 0;
+    right: 0;
+    border-radius: 0 15px 0 100%;
+  }
+  
+  .card::after {
+    bottom: 0;
+    left: 0;
+    border-radius: 0 100% 0 15px;
+  }
+  
+  .card:hover::before,
+  .card:hover:after {
+    width: 100%;
+    height: 100%;
+    border-radius: 15px;
+    transition: all 0.6s;
+  }
+  
+  .card:hover:after {
+    content: "rhheaaa";
+  }
+ 
+
+  #item1.card:hover:after {
+    content: "Taking care of your health is essential for a happy and fulfilling life. Prioritizing both physical and mental well-being can significantly improve your overall quality of life. Maintaining a balanced diet rich in fruits, vegetables, proteins, and whole grains while staying hydrated ensures that your body gets the necessary nutrients. Regular exercise, whether it's walking, jogging, yoga, or strength training, keeps your body active and strong. Equally important is getting enough sleep—at least 7-9 hours each night—to allow your body to rest and recover. Personal hygiene, such as handwashing, oral care, and cleanliness, plays a crucial role in preventing infections.";
+    word-spacing: 8px;
+    ;
+    margin: 5px;
+    ;
+    padding: 20px;
+    box-sizing: border-box;
+  }
+  
+  #item2.card:hover:after {
+    content: "Mental health is just as important as physical health. Managing stress through deep breathing, meditation, or journaling can help maintain a calm mind. Taking breaks from work and engaging in hobbies like reading, painting, or listening to music contributes to relaxation. Staying connected with loved ones and building strong social relationships provide emotional support, while limiting screen time—especially before bed—improves sleep and focus. If stress or anxiety becomes overwhelming, seeking help from a friend, family member, or mental health professional can make a significant difference.";
+    word-spacing: 8px;
+    margin: 5px;
+    ;
+    padding: 20px;
+    box-sizing: border-box;
+  }
+  
+  #item3.card:hover:after {
+    content: "Making healthy lifestyle choices further enhances well-being. Avoiding harmful substances like smoking, excessive alcohol, and drugs protects long-term health. Practicing mindfulness and being present in the moment helps reduce anxiety and fosters a positive outlook. Establishing a daily routine creates stability and reduces stress, while surrounding yourself with positivity and a supportive environment can uplift your mood. By making small, consistent changes, you can achieve a healthier and happier life—because your health is your greatest asset, and taking care of it should always be a priority.";
+    word-spacing: 8px;
+    ;
+    margin: 5px;
+    ;
+    padding: 20px;
+    box-sizing: border-box;
+  }
+

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+    
+<HEAD>
+         
+{% load static %}
+    <title>Profile</title>
+    <link rel="stylesheet" href="{% static 'header.css' %}">
+    <link rel="stylesheet" href="{% static 'home.css' %}">
+    <link rel="stylesheet" href="{% static 'general.css' %}"> 
+    <link rel="stylesheet" href="{% static 'profile.css' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
+</HEAD>
+<body>
+    <nav>
+        <div class="header">
+            <div class="home">
+              <a href="{% url 'home' %}">Home</a>
+            </div>
+            <div class="history">
+              <a href="{% url 'schedule' %}"> Schedule </a>
+            </div>
+            <div class="result">
+                <a href="{% url 'testresult' %}"> Test Result </a>
+            </div>
+            <div class="login">
+                <a href="{% url 'logout' %}">
+                    <button class="login-button">logout</button>
+                </a> 
+            </div>
+        </div>
+        </nav>
+        
+        <img src="{% static 'images/Desain_3d__1_-removebg-preview.png' %}" alt="My Image">
+    
+        <section class="container">
+            <header>Profile</header>
+            <form method="POST" action="{% url 'profileApi' %}" class="form">
+                {% csrf_token %}
+                <div class="input-box">
+                    <label>Full Name</label>
+                    <input required="full_name" placeholder="Enter full name" type="text" name="full_name" >
+                </div>
+                <div class="column">
+                    <div class="input-box">
+                      <label>Phone Number</label>
+                      <input required="phone_number" placeholder="Enter phone number" type="telephone" name="phone_number">
+                    </div>
+                    <div class="input-box">
+                      <label>Birth Date</label>
+                      <input name="birth_date" required type="date">
+                    </div> 
+                </div>
+                <div class="gender-box">
+                  <label>Gender</label>
+                  <div class="gender-option">
+                    <div class="gender">
+                      <input name="gender" id="check-male" type="radio" value="Male">
+                      <label for="check-male">Male</label>
+                    </div>
+                    <div class="gender">
+                      <input name="gender" id="check-female" type="radio" value="Female">
+                      <label for="check-female">Female</label>
+                    </div>
+                  </div>
+                </div>
+                <div class="input-box address">
+                  <label>Blood Group</label>
+                  <div class="column">
+                    <div class="select-box">
+                        <select name="blood_group" required>
+                        <option hidden="">Enter your blood group</option>
+                        <option>A+</option>
+                        <option>B+</option>
+                        <option>AB+</option>
+                        <option>O+</option>
+                        <option>A-</option>
+                        <option>B-</option>
+                        <option>AB-</option>
+                        <option>O-</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+                <button>Submit</button>
+            
+            </form>
+          </section>
+          <script>
+          document.addEventListener("DOMContentLoaded", function () {
+            fetchProfileData();
+        });
+        
+        function fetchProfileData() {
+            fetch('/meditrack/get_profile')  // Ensure the URL matches your Django view
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        console.error("Error fetching profile:", data.error);
+                        return;
+                    }
+        
+                    let profile = data.profile;  // No array, just a single object
+                    
+                    document.querySelector("input[name='full_name']").value = profile.full_name || "";
+                    document.querySelector("input[name='phone_number']").value = profile.phone_number || "";
+                    document.querySelector("input[name='birth_date']").value = profile.birth_date || "";
+                    
+                    // Set gender radio button
+                    if (profile.gender === "Male") {
+                        document.getElementById("check-male").checked = true;
+                    } else if (profile.gender === "Female") {
+                        document.getElementById("check-female").checked = true;
+                    }
+        
+                    // Set blood group dropdown
+                    let bloodGroupSelect = document.querySelector("select[name='blood_group']");
+                    for (let option of bloodGroupSelect.options) {
+                        if (option.value === profile.blood_group) {
+                            option.selected = true;
+                            break;
+                        }
+                    }
+                })
+                .catch(error => console.error("Error fetching profile:", error));
+        }
+        
+</script>
+</body>
+</html>

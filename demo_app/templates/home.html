@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        {% load static %}
+        <title>Home</title>
+        <link rel="stylesheet" href="{% static 'header.css'%}">
+        <link rel="stylesheet" href="{% static 'home.css'%}">
+        <link rel="stylesheet" href="{% static 'general.css'%}"> 
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
+    <body>
+        <nav>
+        <div class="header">
+            <div class="home">
+              <a href="{% url 'home' %}">Home</a>
+            </div>
+            <div class="history">
+              <a href="{% url 'schedule' %}"> Schedule </a>
+            </div>
+            <div class="result">
+                <a href="{% url 'testresult' %}"> Test Result </a>
+            </div>
+            
+            <div class="login">
+                <a href="{% url 'profile' %}">
+                    <button class="login-button">profile</button>
+                </a> 
+            </div>
+        </div>
+        </nav>
+        <div class="title1">
+        <h1>MediTrack</h1>
+        <p>Seamlessly manage your daily medications with smart tracking and timely reminders</p>
+        </div>
+        <div class="main">
+            
+            <img src="{% static 'images/HOMEIMG.jpg' %}" alt="Description" style="max-width: 100%; height: auto;">
+            <!-- <img src="{% static 'myapp/images/HOMEIMG.jpg' %}" alt="My Image"> --img
+            <!-- <img class="img1" srcset="HOMEIMG.jpg"> -->
+        </div>
+        <div class="branchhead">
+            <h1>Prioritizing Your Health:</h1> 
+            <p>A Holistic Approach to Well-Being</p>
+               </div>
+            <div class="branch">
+               <div class="card" id="item1">Maintaining Physical Health</div>
+               <div class="card" id="item2">Prioritizing Mental Well-Being</div>
+               <div class="card" id="item3">Achieving a Balanced Lifestyle</div>
+        </div>
+
+        <div class="aboutp">
+            <h1>About our page</h1>
+            <p>HealthTracker is designed to help you stay on top of your medications, appointments, <br>
+                and medical records—all in one place.&nbsp;With our Medicine Tracker, you can schedule your medications,
+                 <br> receive reminders, and mark them as taken or missed, ensuring you never forget an important dose. <br> 
+                 The Appointment Scheduler helps you keep track of upcoming doctor visits and medical checkups, so you&#39;re always prepared. 
+                 <br>Additionally, the Test Results Storage feature allows you to securely upload 
+                 and access<br> your medical reports in PDF format whenever you need them.<br>Whether you're managing daily medications, tracking important appointments, or storing essential health records, 
+                 <br>this website ensures everything is organized and easily accessible.Take control of your health with a simple, <br>
+                 efficient, and stress-free solution.</p>
+            <img srcset="{% static 'images/a.png' %}" alt="My Image">
+            <!-- <img src="a.png" alt="couldn't load image" > -->
+         </div>
+        
+         
+      
+     
+        
+
+    </body>
+</html>

@@ -1,0 +1,13 @@
+.test {
+  width: 100%;
+  text-align: center;
+  margin-right: 35px;
+  
+}
+
+.actual {
+  max-width: 90%;
+  height: auto;
+  border-radius: 10px;
+  padding-left:750px;
+}

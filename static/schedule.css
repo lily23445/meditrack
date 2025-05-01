@@ -1,0 +1,22 @@
+.heading{
+    display:flex;
+    justify-content: center;
+    align-items:center;
+    font-family:Roboto,Arial;
+    font-size:20px;
+    margin:0;
+}
+
+.schedulemain img{
+    
+        width: 100%;         /* Ensures the image takes up the full width of its container */
+        height: auto;        /* Maintains the aspect ratio */
+        max-width: 550px;    /* Limits the image width to 550px on larger screens */
+        padding: 70px 23px;
+        position: relative;  /* Keeps the image in the document flow */
+        margin: 0 auto;      /* Centers the image horizontally */
+    
+    
+}
+
+

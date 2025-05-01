@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {%load static%}
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Test Result</title>
+    <link rel="stylesheet" href="{% static 'header.css'%}">
+    <link rel="stylesheet" href="{% static 'general.css'%}">   
+    <link rel="stylesheet" href="{% static 'actual.css'%}">  
+    <link rel="stylesheet" href="{% static 'container.css'%}">
+    <link rel="stylesheet" href="{% static 'plus.css'%}">
+    <link rel="stylesheet" href="{% static 'home.css'%}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&amp;display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color:#EAE4DD;
+            margin: 0;
+            padding: 20px;
+            position: relative;
+            min-height: 100vh;
+        }
+        
+        .search-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 20px 0;
+            margin-top: 90px;
+        }
+        .input {
+            width: 300px;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            outline: none;
+        }
+        .search-button {
+            margin-left: 10px;
+            padding: 10px 15px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            
+        }
+        .search-button:hover {
+            background-color: #0056b3;
+        }
+        .file-list {
+            display: flex;
+            flex-direction: column-reverse;
+            gap: 15px;
+            padding: 20px;
+        }
+        .file-item {
+            background: white;
+            padding: 10px;
+            border-radius: 10px;
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            cursor: pointer;
+            overflow: hidden;
+        }
+        .file-meta {
+            font-size: 12px;
+            color: gray;
+            margin-top: 5px;
+        }
+        .file-preview {
+            max-width: 100%;
+            max-height: 150px;
+            object-fit: cover;
+            margin-top: 10px;
+            border-radius: 5px;
+        }
+        .iframe {
+            width: 100%;
+            height: 200px;
+            border: none;
+            margin-top: 10px;
+        }
+        .plusButton {
+    position: absolute;
+    top: 100px; /* or bottom: 550px; but not both */
+    right: 20px;
+    width: 60px;
+    height: 60px;
+    background-color: #007bff;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    z-index: 1000;
+}
+
+.plusButton svg {
+    width: 35px;
+    height: 35px;
+    fill: white;
+    /* Removed bottom: 680px; */
+}
+
+
+        .image-container {
+            position: fixed;
+            right: 20px;
+            top: 10%;
+            transform: translateY(-50%);
+            transform: scale(125%);
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            margin-right:100px;
+            bottom:10px;
+        }
+        .testeres {
+            width: 500px; /* Adjust size as needed */
+            height: auto;
+            filter: drop-shadow(0px 5px 10px rgba(0, 0, 0, 0.3)) contrast(1.1) brightness(1.2);
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="header">
+            <div class="home">
+              <a href="{% url 'home' %}">Home</a>
+            </div>
+            <div class="history">
+              <a href="{% url 'schedule' %}"> Schedule </a>
+            </div>
+            <div class="result">
+                <a href="{% url 'testresult' %}"> Test Result </a>
+            </div>
+            <div class="login">
+                <a href="{% url 'logout' %}">
+                    <button class="login-button">Logout</button>
+                </a> 
+            </div>
+        </div>
+        </nav>
+    
+    <div class="search-container">
+        <input id="searchInput" class="input" type="text" placeholder="Search by file name or date">
+        <button class="search-button">Search</button>
+    </div>
+    
+    <input type="file" id="fileInput" style="display: none;" accept="image/*, application/pdf">
+    <div class="file-list" id="fileList"></div>
+    
+    <div tabindex="0" class="plusButton" onclick="document.getElementById('fileInput').click();">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 30">
+            <path d="M13.75 23.75V16.25H6.25V13.75H13.75V6.25H16.25V13.75H23.75V16.25H16.25V23.75H13.75Z"></path>
+        </svg>
+    </div>
+
+    <div class="image-container">
+        
+        <img src="{% static 'images/meds.svg' %}" alt="My Image">
+       
+    </div> 
+    <div class="file-list" id="fileList">
+        {% for file in uploaded_files %}
+            <div class="file-item">
+                <div style="font-weight: bold;">{{ file.file.name }}</div>
+                <div class="file-meta">Uploaded on: {{ file.uploaded_at }}</div>
+    
+                {% if file.file.url|slice:"-3:" == "pdf" %}
+                    <iframe class="iframe" src="{{ file.file.url }}"></iframe>
+                {% else %}
+                    <img class="file-preview" src="{{ file.file.url }}" alt="Uploaded Image">
+                {% endif %}
+    
+                <a href="{{ file.file.url }}" target="_blank" style="margin-top: 10px; color: #007bff; text-decoration: none;">
+                    Open File
+                </a>
+            </div>
+        {% empty %}
+            <p>No files uploaded yet.</p>
+        {% endfor %}
+    </div>
+    
+    
+    <!-- <script>
+        document.getElementById('fileInput').addEventListener('change', function(event) {
+            let file = event.target.files[0];
+            if (file) {
+                let fileList = document.getElementById('fileList');
+                let newFileItem = document.createElement('div');
+                newFileItem.className = 'file-item';
+                let timestamp = new Date().toLocaleString();
+                let fileURL = URL.createObjectURL(file);
+                
+                let fileName = document.createElement('div');
+                fileName.textContent = file.name;
+                fileName.style.fontWeight = 'bold';
+                newFileItem.setAttribute('data-name', file.name);
+                newFileItem.setAttribute('data-date', timestamp);
+                
+                let fileMeta = document.createElement('div');
+                fileMeta.className = 'file-meta';
+                fileMeta.textContent = `Uploaded on: ${timestamp}`;
+                
+                let filePreview;
+                if (file.type.startsWith('image/')) {
+                    filePreview = document.createElement('img');
+                    filePreview.src = fileURL;
+                    filePreview.className = 'file-preview';
+                } else if (file.type === "application/pdf") {
+                    filePreview = document.createElement('iframe');
+                    filePreview.src = fileURL;
+                }
+                
+                let fileLink = document.createElement('a');
+                fileLink.href = fileURL;
+                fileLink.target = "_blank";
+                fileLink.textContent = "Open File";
+                fileLink.style.marginTop = "10px";
+                fileLink.style.color = "#007bff";
+                fileLink.style.textDecoration = "none";
+                
+                newFileItem.appendChild(fileName);
+                newFileItem.appendChild(fileMeta);
+                if (filePreview) newFileItem.appendChild(filePreview);
+                newFileItem.appendChild(fileLink);
+                fileList.prepend(newFileItem);
+            }
+        });
+    </script>
+</body>
+</html> -->
+
+ 
+<script>
+    document.getElementById('fileInput').addEventListener('change', function(event) {
+        let file = event.target.files[0];
+        if (file) {
+            let formData = new FormData();
+            formData.append('file', file);
+    
+            fetch("{% url 'testresult' %}", {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}',  // CSRF token for security
+                },
+            })
+            .then(response => response.text())  // Get the whole HTML page again
+            .then(data => {
+                let parser = new DOMParser();
+                let doc = parser.parseFromString(data, "text/html");
+                let newFileList = doc.getElementById('fileList').innerHTML;
+                document.getElementById('fileList').innerHTML = newFileList;  // Update file list
+            })
+            .catch(error => console.error("Error uploading file:", error));
+        }
+    });
+    </script>
+    

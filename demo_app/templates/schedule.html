@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {%load static%}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medicine Tracker</title>
+    <link rel="stylesheet" href="{% static 'header.css'%}">
+    <link rel="stylesheet" href="{% static 'general.css'%}"> 
+    <link rel="stylesheet" href="{% static 'schedule.css'%}"> 
+    <style>
+        /* .scheduleimg
+        {
+            height : 600px;
+            width : 100%;
+            display : flex;
+            flex:0.5;
+            padding-top:50px;
+            padding-left: 200px;
+        } */
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: flex-start;
+            align-items: flex-start;
+            height: 100vh;
+            background-color: #f4f4f4;
+            padding-left: 50px;
+            background-color: #EAE4DD;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 600px;
+            overflow-x: auto;
+            margin-right: 20px;
+            margin-top:100px;
+            margin-left:60px;
+            font-family:Roboto,Arial;
+            font-size:16px;
+        }
+        .calendar-container {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        .calendar {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        input[type="text"], input[type="date"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-family:Roboto,Arial;
+        }
+        .checkbox-group {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+        button {
+            padding: 10px;
+            width: 100%;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+           
+        }
+
+        .submit-btn{
+            padding: 10px;
+            width: 100%;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 30px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .medicine-list {
+            margin-top: 20px;
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .medicine-list th, .medicine-list td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+            
+        }
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 40px);
+            gap: 5px;
+            justify-content: center;
+        }
+        .calendar-day {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #ddd;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        .taken { background-color: green; color: white; }
+        .missed { background-color: red; color: white; }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="header">
+            <div class="home">
+              <a href="{% url 'home' %}">Home</a>
+            </div>
+            <div class="history">
+              <a href="{% url 'schedule' %}"> Schedule</a>
+            </div>
+            <div class="result">
+                <a href="{% url 'testresult' %}"> Test Result </a>
+            </div>
+            <div class="login">
+                <a href="{% url 'logout' %}">
+                <button class="login-button">Logout</button>
+            </a>
+            </div>
+        </div>
+        </nav>
+        <img src="{% static 'images/scheduleimage.jpg' %}" alt="My Image">
+        
+        <div class="container">
+            <h2>Medicine Tracker</h2>
+            <form method="POST">
+                {% csrf_token %}
+                <input type="text" name="medicine_name" placeholder="Enter medicine name" required>
+                <input type="date" name="start_date" required>
+                <input type="date" name="end_date" required>
+            
+                <label><input type="checkbox" name="schedule[]" value="morning"> Morning</label>
+                <label><input type="checkbox" name="schedule[]" value="afternoon"> Afternoon</label>
+                <label><input type="checkbox" name="schedule[]" value="night"> Night</label>
+            
+                <button class="submit-btn" type="submit">Save</button>
+
+            </form>
+    
+            <table class="medicine-list" id="medicineTable">
+                <!-- <thead>
+                    <tr>
+                        <th>Medicine Name</th>
+                        <th>Start Date</th>
+                        <th>End Date</th>
+                        <th>Schedule</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead> -->
+                <tbody>
+                 
+                        {% for medicine in medicines %}
+                            <tr data-start="{{ medicine.start_date }}" data-end="{{ medicine.end_date }}" data-name="{{ medicine.medicine_name }}">
+                                <td>{{ medicine.medicine_name }}</td>
+                                <td>{{ medicine.start_date }}</td>
+                                <td>{{ medicine.end_date }}</td>
+                                <td>{{ medicine.time }}</td>
+                                <td><button onclick="generateCalendar('{{ medicine.start_date }}', '{{ medicine.end_date }}', '{{ medicine.medicine_name }}')">View Calendar</button></td>
+                            </tr>
+                        {% endfor %}
+                    
+                    
+                </tbody>
+            </table>
+        </div>
+    
+        <!-- Place Calendar Here (Outside .container) -->
+        <div class="calendar-container">
+            {% for log in medicine_logs %}
+                <div class="calendar">
+                    <h3>{{ log.medicine_name }} ({{ log.time }})</h3>
+                    <div class="calendar-grid">
+                        {% for day in log.get_date_range %}
+                            <div class="calendar-day" onclick="toggleStatus(this,`{{log.medicine_name}}`,`{{day.year}}`,`{{day.month}}`,`{{day.day}}`)">
+                                {{ day.day }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    
+    <script>
+     let updateMedicationStatusUrl = "{% url 'update_medication_status' %}";  // Get the URL for updating status  
+   function generateCalendar(startDate, endDate, medicineName) {
+
+    let taken_data = fetch("{% url 'get_taken_status' %}").then((data,err)=>{
+        if(data){
+                return data.json();
+            }
+        }).then((data)=>{
+            console.log(data)
+            })
+
+    let calendarContainer = document.getElementById("calendarContainer");
+    
+    let start = new Date(startDate);
+    let end = new Date(endDate);
+    let currentDate = new Date(start);
+
+    let calendarDiv = document.createElement("div"); 
+    calendarDiv.classList.add("calendar");
+    calendarDiv.innerHTML = `<h3>${medicineName} Schedule</h3>`;
+
+    let grid = document.createElement("div");
+    grid.classList.add("calendar-grid");
+
+    while (currentDate <= end) {
+        let dayElement = document.createElement("div");
+        dayElement.classList.add("calendar-day");
+        dayElement.textContent = currentDate.getDate();
+        dayElement.dataset.date = currentDate.toISOString().split("T")[0]; // Store date in YYYY-MM-DD format
+        dayElement.dataset.medicine = medicineName; // Store medicine name
+        console.log(dayElement ,"This is a day element")
+        // Add click event to toggle class and send update request
+        dayElement.onclick = function () {
+            if (dayElement.classList.contains("taken")) {
+                dayElement.classList.remove("taken");
+                dayElement.classList.add("missed");
+            } else if (dayElement.classList.contains("missed")) {
+                dayElement.classList.remove("missed");
+            } else {
+                dayElement.classList.add("taken");
+            }
+
+            // Call function to update backend
+            toggleStatus(dayElement);
+        };
+
+        grid.appendChild(dayElement);
+        currentDate.setDate(currentDate.getDate() + 1);
+    }
+
+    calendarDiv.appendChild(grid);
+    calendarContainer.appendChild(calendarDiv);
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+    let rows = document.querySelectorAll("#medicineTable tbody tr");
+    rows.forEach(row => {
+        let startDate = row.getAttribute("data-start");
+        let endDate = row.getAttribute("data-end");
+        let medicineName = row.getAttribute("data-name");
+
+        if (startDate && endDate && medicineName) {
+            generateCalendar(startDate, endDate, medicineName);
+        }
+    });
+});
+
+function toggleStatus(dayElement,medicine_name,year,month,day) {
+    let medicineName = medicine_name;
+    console.log(day)
+    let date = year+"-"+month +"-"+day;
+    let status;
+
+    // Toggle the status
+    if (dayElement.classList.contains("taken")) {
+        dayElement.classList.remove("taken");
+        dayElement.classList.add("missed");
+        status = "missed";
+    } else if (dayElement.classList.contains("missed")) {
+        dayElement.classList.remove("missed");
+        status = "";  // No status, reset
+    } else {
+        dayElement.classList.add("taken");
+        status = "taken";
+    }
+
+    console.log("Sending update:", { medicine_name: medicineName, date: date, status: status });
+
+    // Send the update to the server via fetch
+    fetch("{% url 'update_medication_status' %}", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": getCookie("csrftoken"),
+        },
+        body: JSON.stringify({
+            medicine_name: medicineName,
+            date: date,
+            status: status,
+        }),
+    })
+    .then((response,error) =>{console.log(response)})
+    .then(data => {
+        console.log("Update successful:", data);
+    })
+    .catch(error => {
+        console.error("Error updating status:", error);
+    });
+}
+
+
+// CSRF token retrieval function
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+</script>
+
+</body>
+</html>
+
